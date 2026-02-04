@@ -11,6 +11,9 @@ on:
       - 'docs/**'
       - 'LICENSE'
       - '.gitignore'
+      - '.github/workflows/security.yml'
+      - '.github/workflows/release.yml'
+      - '.github/dependabot.yml'
   pull_request:
     branches:
       - main
@@ -20,6 +23,9 @@ on:
       - 'docs/**'
       - 'LICENSE'
       - '.gitignore'
+      - '.github/workflows/security.yml'
+      - '.github/workflows/release.yml'
+      - '.github/dependabot.yml'
   workflow_dispatch:
 
 # Cancel in-progress runs when a new run is triggered
