@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <IsPackable>false</IsPackable>
+        <IsTestProject>true</IsTestProject>
+        <!-- Disabled StyleCop rules for tests -->
+        <NoWarn>$(NoWarn);SA1101;SA1200;SA1309;SA1633;SA1210;SA1204;SA1413;SA1618;SA0001</NoWarn>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <!-- Test Framework -->
+        <PackageReference Include="xunit" />
+        <PackageReference Include="xunit.runner.visualstudio" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" />
+
+        <!-- Mocking -->
+        <PackageReference Include="Moq" />
+
+        <!-- Code Coverage -->
+        <PackageReference Include="coverlet.collector" />
+
+        <!-- Performance Benchmarking -->
+        <PackageReference Include="BenchmarkDotNet" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- Reference the package being tested -->
+        <ProjectReference Include="..\..\src\Clywell.Core.Logging\Clywell.Core.Logging.csproj" />
+    </ItemGroup>
+
+</Project>
