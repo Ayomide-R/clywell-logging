@@ -1,16 +1,16 @@
 using Clywell.Core.Logging.Extensions;
+using StudentScoreApi.Models;
 using StudentScoreApi.Services;
 using Serilog.Events;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllers();
+// Register services
 builder.Services.AddSingleton<StudentService>();
 
 // Clywell Logging Configuration
-// NOTE: Method name in source is AddLogging, differs from README's AddClywellLogging
-builder.AddLogging(config => 
+builder.AddLogging(config =>
 {
     config
         .WithMinimumLevel(LogEventLevel.Debug)
@@ -21,11 +21,49 @@ builder.AddLogging(config =>
 var app = builder.Build();
 
 // Clywell Middleware
-// NOTE: Method names in source are UseRequestTracking/UseRequestLogging
 app.UseRequestTracking();
 app.UseRequestLogging();
 
-app.UseAuthorization();
-app.MapControllers();
+// ─── Minimal API Endpoints ───────────────────────────────────────────────────
+
+app.MapGet("/api/students", (StudentService studentService, ILogger<Program> logger) =>
+{
+    using (logger.BeginTimedScope("GetAllStudents", new Dictionary<string, object>()))
+    {
+        logger.Info("Retrieving all students");
+
+        var students = logger.LogExecutionTime("FetchStudentsFromService", () =>
+            studentService.GetAll());
+
+        logger.Info("Retrieved {StudentCount} students", students.Count);
+
+        return Results.Ok(students);
+    }
+});
+
+app.MapGet("/api/students/{id:guid}", (Guid id, StudentService studentService, ILogger<Program> logger) =>
+{
+    using (logger.BeginTimedScope("GetStudentById", new Dictionary<string, object> { ["StudentId"] = id }))
+    {
+        var student = studentService.GetById(id);
+
+        if (student is null)
+        {
+            logger.Warning("Student with ID {StudentId} not found", id);
+            return Results.NotFound();
+        }
+
+        logger.Info("Found student {StudentName}", student.Name);
+
+        if (logger.IsEnabled(LogLevel.Debug))
+        {
+            logger.Debug("Full student data: {Json}", JsonSerializer.Serialize(student));
+        }
+
+        return Results.Ok(student);
+    }
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
 
 app.Run();
