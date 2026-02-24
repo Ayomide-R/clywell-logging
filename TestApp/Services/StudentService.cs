@@ -1,6 +1,6 @@
-using StudentScoreApi.Models;
+using TestApp.Models;
 
-namespace StudentScoreApi.Services;
+namespace TestApp.Services;
 
 public class StudentService
 {

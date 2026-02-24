@@ -1,6 +1,6 @@
 using Clywell.Core.Logging.Extensions;
-using StudentScoreApi.Models;
-using StudentScoreApi.Services;
+using TestApp.Models;
+using TestApp.Services;
 using Serilog.Events;
 using System.Text.Json;
 

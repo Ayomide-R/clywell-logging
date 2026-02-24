@@ -1,4 +1,4 @@
-namespace StudentScoreApi.Models;
+namespace TestApp.Models;
 
 public class Score
 {
